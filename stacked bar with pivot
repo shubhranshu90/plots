@@ -1,7 +1,12 @@
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
+from dash.dependencies import Input, Output
+import plotly.express as px
+#########################################
 import plotly.graph_objects as go
 import pandas as pd
 import plotly.offline as pyo
-
 from plotly.subplots import make_subplots
 
 
@@ -33,7 +38,7 @@ fig_stack = go.Figure(data=[
 ])
 # Change the bar mode
 fig_stack.update_layout(barmode='stack')
-pyo.plot(fig_stack)
+# pyo.plot(fig_stack)
 
 
 # Below section is for 100% stacked bar
@@ -59,7 +64,7 @@ fig_stack_per = go.Figure(data=[
 ])
 # Change the bar mode
 fig_stack_per.update_layout(barmode='stack')
-pyo.plot(fig_stack_per)
+# pyo.plot(fig_stack_per)
 
 
 # Chart for bar and distribution
@@ -85,7 +90,7 @@ fig_dual.add_trace(
     secondary_y=True,
 )
 
-pyo.plot(fig_dual)
+# pyo.plot(fig_dual)
 
 
 # For Newly Empanelled providers
@@ -127,5 +132,23 @@ fig_dual_new.add_trace(
     secondary_y=True,
 )
 
-pyo.plot(fig_dual_new)
+# pyo.plot(fig_dual_new)
 
+
+
+
+######################################
+app = dash.Dash(__name__)
+
+app.layout = html.Div([
+
+    dcc.Graph(id="st_bar1",figure = fig_stack),
+    dcc.Graph(id="hund_st_bar",figure = fig_stack_per),
+    dcc.Graph(id="dual_axes",figure = fig_dual),
+    dcc.Graph(id="dual_axes_new",figure = fig_dual_new)
+
+])
+
+#add callbacks here
+
+app.run_server()
