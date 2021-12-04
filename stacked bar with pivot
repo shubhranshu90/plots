@@ -10,6 +10,7 @@ df = pd.read_csv(r"E:\df_original.csv")
 df_pivot = df.copy()
 # df_pivot = pd.read_excel(r"E:\df_pivot_.xlsx")
 
+df_pivot.columns = df_pivot.columns.str.replace(" ","_")
 
 
 df_pivot = df_pivot.pivot_table(
