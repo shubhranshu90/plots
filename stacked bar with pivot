@@ -39,8 +39,6 @@ pyo.plot(fig_stack)
 # Below section is for 100% stacked bar
 
 
-# {'key':value, key:value}
-
 df_pivot_per = df_pivot.copy()
 
 df_pivot_per['percentage']= df_pivot_per.sum(axis=1)
@@ -71,7 +69,6 @@ df_pivot_t = df_pivot_t.T
 df_pivot_t['total'] = df_pivot_t.sum(axis=1)
 
 
-# df.new_col= df.old_col/df.tot.sum*100
 df_pivot_t['total'].sum()
 df_pivot_t['pro_dist'] = df_pivot_t['total']/df_pivot_t['total'].sum()
 
@@ -89,4 +86,46 @@ fig_dual.add_trace(
 )
 
 pyo.plot(fig_dual)
+
+
+# For Newly Empanelled providers
+
+df_copy = df.copy()
+df_copy = df_copy[df_copy['Newly_Added_Provider']==1]
+df_copivot = df_copy.copy()
+
+
+df_copivot = df_copivot.pivot_table(
+                                index = 'Provider_Category', 
+                                columns = 'Contract_Start_Date',
+                                values = 'Provider_Name',
+                                aggfunc = 'count'
+                                )
+# if there is a case of no newly empanelled provider in a category, 
+# it won't be plotted
+# Is that important?
+
+# Now plot the same again
+
+
+df_copivot['total'] = df_copivot.sum(axis=1)
+
+
+df_copivot['total'].sum()
+df_copivot['pro_dist'] = df_copivot['total']/df_copivot['total'].sum()
+
+fig_dual_new = make_subplots(specs=[[{"secondary_y": True}]])
+
+fig_dual_new.add_trace(
+    go.Bar(x=df_copivot.index, y=df_copivot.total, name="Number of Newly Empanelled Providers"),
+    secondary_y=False,
+)
+
+
+fig_dual_new.add_trace(
+    go.Scatter(x=df_copivot.index, y=df_copivot.pro_dist, name="Distribution of Newly Empanelled Providers"),
+    secondary_y=True,
+)
+
+pyo.plot(fig_dual_new)
 
